@@ -1,7 +1,8 @@
 package com.example.BTC6_Nmap2
 
-data class Toilet(
-    val id: Long,
+import java.math.BigDecimal
+
+class ToiletRequest(
     val name:String,
     val address:String,
     val latitude: Double,

@@ -8,7 +8,7 @@ function App() {
       ])
 
   function getTest(){
-      fetch("/api/lists")
+      fetch("/api/toilet")
       .then((res)=>res.json())
       .then((data) => setCount(data[0].name))
       }

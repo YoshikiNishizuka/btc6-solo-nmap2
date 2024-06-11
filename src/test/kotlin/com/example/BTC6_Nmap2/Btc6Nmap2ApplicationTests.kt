@@ -9,6 +9,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/insert_test_data.sql")
@@ -37,7 +38,7 @@ class Btc6Nmap2ApplicationTests (
 	@Test
 	fun `GETリクエストはtoilettesオブジェクトのリストを返す`(){
 		//リクエスト実行
-		val response = restTemplate.getForEntity("http://localhost:$port/api/lists",Array<Toilet>::class.java)
+		val response = restTemplate.getForEntity("http://localhost:$port/api/toilet",Array<Toilet>::class.java)
 		val toilettes = response.body!!
 		println("::::::::::::::::::::::::::::::::::::::::::::")
 		println(toilettes)
@@ -48,4 +49,16 @@ class Btc6Nmap2ApplicationTests (
 		//2番目の要素の name は "立石池" であること
 		assertThat(toilettes[1].name, equalTo("立石池"))
 	}
+
+	@Test
+	fun `POSTリクエストはOKステータスを返す`(){
+		println("Postの実行部分通過")
+		// localhost/api/listsに POSTリクエストを送る。この時のボディは{
+		val request = ToiletRequest("テスト公園","テスト市",99.999999,135.555555,9,9,9,9,true,true,true )
+		val response = restTemplate.postForEntity("http://localhost:$port/api/toilet",request,String::class.java)
+		println("レスポンスの中身:$response")
+		// レスポンスのステータスコードは OK であること。
+		assertThat(response.statusCode, equalTo(HttpStatus.OK))
+	}
+
 }
