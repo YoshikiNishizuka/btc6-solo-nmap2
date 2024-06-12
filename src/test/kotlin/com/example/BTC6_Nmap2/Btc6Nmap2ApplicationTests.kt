@@ -2,6 +2,7 @@ package com.example.BTC6_Nmap2
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasItem
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -30,7 +31,7 @@ class Btc6Nmap2ApplicationTests (
 	@Test
 	fun `GETリクエストはOKステータスを返す`(){
 		//Localhost/api/lists　にGETリクエストを発行する
-		val response = restTemplate.getForEntity("http://localhost:$port/api/lists",String::class.java)
+		val response = restTemplate.getForEntity("http://localhost:$port/api/toilet",String::class.java)
 		// レスポンスのステータスコードはOKである
 		assertThat(response.statusCode, equalTo(HttpStatus.OK))
 	}
@@ -43,9 +44,9 @@ class Btc6Nmap2ApplicationTests (
 		println("::::::::::::::::::::::::::::::::::::::::::::")
 		println(toilettes)
 		//取得した配列の長さが2である
-		assertThat(toilettes.size, equalTo(2))
+		assertThat(toilettes.size, equalTo(3))
 		//最初の要素の name は "田園バレー交流施設" であること
-		assertThat(toilettes[0].name, equalTo("田園バレー交流施設"))
+		assertThat(toilettes[0].name, equalTo("あぐりん村"))
 		//2番目の要素の name は "立石池" であること
 		assertThat(toilettes[1].name, equalTo("立石池"))
 	}
@@ -59,6 +60,54 @@ class Btc6Nmap2ApplicationTests (
 		println("レスポンスの中身:$response")
 		// レスポンスのステータスコードは OK であること。
 		assertThat(response.statusCode, equalTo(HttpStatus.OK))
+	}
+
+	@Test
+	fun `POSTリクエストはToiletオブジェクトを格納する`() {
+		// localhost/toilet に GETリクエストを送り、レスポンスを Toiletオブジェクトの配列として解釈する。
+		val response = restTemplate.getForEntity("http://localhost:$port/api/toilet",Array<Toilet>::class.java)
+		// このときのレスポンスを beforeArray として記憶。
+		val beforeArray = response.body!!
+		// localhost/todos に POSTリクエストを送る。
+		val request = ToiletRequest("テスト公園２","テスト市２",99.999999,135.555555,9,9,9,9,true,true,true )
+		restTemplate.postForEntity("http://localhost:$port/api/toilet",request,String::class.java)
+		// ふたたび localhost/toilet に GETリクエストを送り、レスポンスを Toiletオブジェクトの配列として解釈する。
+		val response2 = restTemplate.getForEntity("http://localhost:$port/api/toilet", Array<Toilet>::class.java)
+		// このときのレスポンスを afterArray として記憶。
+		val afterArray = response2.body!!
+
+		// 配列 afterArray は、配列 beforeArray よりも 1 要素だけ多い。
+		assertThat(afterArray.size, equalTo(beforeArray.size + 1))
+		// 配列 afterArray には "hello" をもつTodoオブジェクトが含まれている。
+		assertThat(afterArray.map { toilet: Toilet -> toilet.name }, hasItem("テスト公園２"))
+	}
+
+	@Test
+	fun `GET　ID指定でToilet項目一つを返す`() {
+		val response = restTemplate.getForEntity("http://localhost:$port/api/toilet/1", Array<Toilet>::class.java)
+		val toilet = response.body!!
+		// 取得した要素は1つの配列であること
+		assertThat(toilet.size, equalTo(1))
+		// 取得した要素は id=1 であり、text が "foo" であること。
+		assertThat(toilet[0].id, equalTo(1))
+		assertThat(toilet[0].name, equalTo("あぐりん村"))
+	}
+
+	@Test
+	fun `ID指定でToilet項目をデータベースから削除する`(){
+		// localhost/toilet に GETリクエストを送り、レスポンスを Toiletオブジェクトの配列として解釈する。
+		val response = restTemplate.getForEntity("http://localhost:$port/api/toilet",Array<Toilet>::class.java)
+		// このときのレスポンスを beforeArray として記憶。
+		val beforeArray = response.body!!
+		//Deleteリクエストを送る。削除するIDは1の{"id":1,"name":"あぐりん村"}
+		restTemplate.delete("http://localhost:$port/api/toilet/1")
+
+		// ふたたび localhost/toilet に GETリクエストを送り、レスポンスを Toiletオブジェクトの配列として解釈する。
+		val response2 = restTemplate.getForEntity("http://localhost:$port/api/toilet", Array<Toilet>::class.java)
+		// このときのレスポンスを afterArray として記憶。
+		val afterArray = response2.body!!
+		// 配列 todos2 は、配列 todos1 よりも 1 要素だけ少ない。
+		assertThat(afterArray.size, equalTo(beforeArray.size - 1))
 	}
 
 }
