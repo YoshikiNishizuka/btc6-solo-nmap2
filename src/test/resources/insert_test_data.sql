@@ -1,9 +1,9 @@
 TRUNCATE TABLE toilettes;
 
-INSERT INTO toilettes(id,name,address,latitude,longitude,m_sum,w_sum,uni_sum,multi_toilet,wheelchair,babies,ostomate) VALUES
+INSERT INTO toilettes(id,name,address,lat,lng,m_sum,w_sum,uni_sum,multi_toilet,wheelchair,babies,ostomate) VALUES
 
     (
-        1,
+--        1,
         'あぐりん村',
         '長久手市前熊下田１３４',
         35.185375,
@@ -17,7 +17,7 @@ INSERT INTO toilettes(id,name,address,latitude,longitude,m_sum,w_sum,uni_sum,mul
         'FALSE'
     ),
     (
-        2,
+--        2,
         '立石池',
         '長久手市岩作北山',
         35.190505,
@@ -31,7 +31,7 @@ INSERT INTO toilettes(id,name,address,latitude,longitude,m_sum,w_sum,uni_sum,mul
         'FALSE'
     ),
     (
-        3,
+--        3,
         '修景・観察広場',
         '長久手市岩作大根',
         35.179347,

@@ -41,8 +41,6 @@ class Btc6Nmap2ApplicationTests (
 		//リクエスト実行
 		val response = restTemplate.getForEntity("http://localhost:$port/api/toilet",Array<Toilet>::class.java)
 		val toilettes = response.body!!
-		println("::::::::::::::::::::::::::::::::::::::::::::")
-		println(toilettes)
 		//取得した配列の長さが2である
 		assertThat(toilettes.size, equalTo(3))
 		//最初の要素の name は "田園バレー交流施設" であること
@@ -53,11 +51,9 @@ class Btc6Nmap2ApplicationTests (
 
 	@Test
 	fun `POSTリクエストはOKステータスを返す`(){
-		println("Postの実行部分通過")
 		// localhost/api/listsに POSTリクエストを送る。この時のボディは{
 		val request = ToiletRequest("テスト公園","テスト市",99.999999,135.555555,9,9,9,9,true,true,true )
 		val response = restTemplate.postForEntity("http://localhost:$port/api/toilet",request,String::class.java)
-		println("レスポンスの中身:$response")
 		// レスポンスのステータスコードは OK であること。
 		assertThat(response.statusCode, equalTo(HttpStatus.OK))
 	}

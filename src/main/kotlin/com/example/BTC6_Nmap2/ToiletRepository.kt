@@ -34,13 +34,13 @@ class ToiletRepository(
 ) {
 
     fun getToilettes():Array<Toilet>{
-        val toilet = jdbcTemplate.query("SELECT id,name,address,latitude,longitude,m_sum,w_sum,uni_sum," +
+        val toilet = jdbcTemplate.query("SELECT id,name,address,lat,lng,m_sum,w_sum,uni_sum," +
                 "multi_toilet,wheelchair,babies,ostomate FROM toilettes",toiletRowMapper)
         return toilet.toTypedArray()
     }
 
     fun getToiletID(id:Long):Array<Toilet>{
-        val toilet = jdbcTemplate.query("SELECT id,name,address,latitude,longitude,m_sum,w_sum,uni_sum," +
+        val toilet = jdbcTemplate.query("SELECT id,name,address,lat,lng,m_sum,w_sum,uni_sum," +
                                 "multi_toilet,wheelchair,babies,ostomate FROM toilettes WHERE id=$id", toiletRowMapper)
         return toilet.toTypedArray()
     }
@@ -48,8 +48,8 @@ class ToiletRepository(
     fun saveToilet(todoRequest: ToiletRequest): String {
         val name = todoRequest.name
         val address = todoRequest.address
-        val latitude = todoRequest.latitude
-        val longitude = todoRequest.longitude
+        val lat = todoRequest.lat
+        val lng = todoRequest.lng
         val m_sum = todoRequest.m_sum
         val w_sum = todoRequest.w_sum
         val uni_sum = todoRequest.uni_sum
@@ -59,9 +59,9 @@ class ToiletRepository(
         val ostomate = todoRequest.ostomate
 
         jdbcTemplate.update("INSERT INTO toilettes " +
-                "(name,address,latitude,longitude,m_sum,w_sum,uni_sum,multi_toilet," +
+                "(name,address,lat,lng,m_sum,w_sum,uni_sum,multi_toilet," +
                 "wheelchair,babies,ostomate) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-            name,address,latitude,longitude,m_sum,w_sum,uni_sum,multi_toilet,wheelchair,babies,ostomate)
+            name,address,lat,lng,m_sum,w_sum,uni_sum,multi_toilet,wheelchair,babies,ostomate)
         return "update"
     }
 

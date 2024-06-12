@@ -26,7 +26,6 @@ class NmapController (@Autowired val toiletRepository: ToiletRepository) {
 
     @PostMapping("/api/toilet")
     fun saveToilet(@RequestBody toiletRequest: ToiletRequest): String {
-        println("ポストルート通過")
         return toiletRepository.saveToilet(toiletRequest)
     }
 
@@ -34,11 +33,9 @@ class NmapController (@Autowired val toiletRepository: ToiletRepository) {
     fun deleteTodo(@PathVariable("id") id: Long): ResponseEntity<Unit> {
         val isTrue = toiletRepository.getToiletID(id).size
         if (isTrue == 1) {
-            println("デリートルート")
             toiletRepository.deleteToilet(id)
             return ResponseEntity.ok().build<Unit>()
         } else {
-            println("404ルート")
             return ResponseEntity(HttpStatus.NOT_FOUND)
         }
     }

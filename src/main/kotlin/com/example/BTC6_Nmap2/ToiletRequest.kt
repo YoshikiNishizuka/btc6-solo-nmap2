@@ -5,8 +5,8 @@ import java.math.BigDecimal
 class ToiletRequest(
     val name:String,
     val address:String,
-    val latitude: Double,
-    val longitude: Double,
+    val lat: Double,
+    val lng: Double,
     val m_sum:Short,
     val w_sum:Short,
     val uni_sum:Short,
