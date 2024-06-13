@@ -20,11 +20,8 @@ const App = () => {
   const [allPlace,setAllPlace] = useState([])
   const [mapzoom, setMapzoom] = useState("16");
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
-  console.log(mapzoom)
-  console.log(center);
   useEffect(() => {
     moveCurrentPosition();
-    console.log("render")
     fetch("/api/toilet")
       .then((res) => res.json())
       .then((data) => {

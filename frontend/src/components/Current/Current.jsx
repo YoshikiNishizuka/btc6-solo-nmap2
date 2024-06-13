@@ -9,16 +9,12 @@ export function Current(props) {
       navigator.geolocation.getCurrentPosition(resolve, reject)
     );
   const moveCurrentPosition = async () => {
-    console.log("クリック直後")
     // setMapKey(new Date().getTime());
-    console.log("再描画一回め")
     const location = await getCurrentPosition();
-    console.log("現在地ゲット")
     setCurrentPosition({
       lat: location.coords.latitude,
       lng: location.coords.longitude,
     });
-    console.log("setCurrentPosition")
     setCenter({
       lat: location.coords.latitude,
       lng: location.coords.longitude,

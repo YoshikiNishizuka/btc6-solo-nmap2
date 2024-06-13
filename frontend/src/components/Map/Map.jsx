@@ -1,9 +1,17 @@
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Circle,
+  useMapEvents,
+} from "react-leaflet";
 import L from "leaflet";
 import currentMarker from "../../mapIcon/leaf-green.png";
 import placeMarker from "../../mapIcon/leaf-red.png";
 import shadowMarker from "../../mapIcon/leaf-shadow.png";
+import addMarker from "../../mapIcon/leaf-orange.png";
 import { Current } from "../Current";
 import { AllArea } from "../AllArea";
 import { AddPoint } from "../AddPoint";
@@ -11,7 +19,6 @@ import { Stack } from "@mantine/core";
 import { Delete } from "../Delete";
 import { useEffect, useState } from "react";
 import { Filter } from "../Filter/Filter";
-import { Try } from "../Try";
 
 // // 現在地アイコン
 const currentIcon = L.icon({
@@ -26,6 +33,17 @@ const currentIcon = L.icon({
 // // 検索値アイコン
 const placeIcon = L.icon({
   iconUrl: placeMarker,
+  shadowUrl: shadowMarker,
+  iconSize: [19, 47],
+  shadowSize: [25, 32],
+  iconAnchor: [11, 46],
+  shadowAnchor: [2, 31],
+  popupAnchor: [-1.5, -38],
+});
+
+// // 追加アイコン
+const addIcon = L.icon({
+  iconUrl: addMarker,
   shadowUrl: shadowMarker,
   iconSize: [19, 47],
   shadowSize: [25, 32],
@@ -77,12 +95,12 @@ export const Map = (props) => {
             obj.lng
           ).toFixed(3) + "km")
     );
-    await setAllPlace(addDistance)
+    await setAllPlace(addDistance);
   };
 
   useEffect(() => {
     getNearestList();
-  },[]);
+  }, []);
 
   const deleteMark = async (ele) => {
     await fetch(`/api/toilet/${ele}`, {
@@ -94,6 +112,23 @@ export const Map = (props) => {
         setAllPlace(data);
       });
   };
+
+  function LocationMarker() {
+    const [position, setPosition] = useState(null);
+    useMapEvents({
+      click: (location) => {
+        setPosition([location.latlng.lat, location.latlng.lng]);
+      },
+    });
+
+    return position === null ? null : (
+      <Marker position={position} icon={addIcon} draggable={true}>
+        <Popup>
+          <AddPoint position={position}></AddPoint>
+        </Popup>
+      </Marker>
+    );
+  }
 
   return (
     <>
@@ -167,15 +202,15 @@ export const Map = (props) => {
                   setMapKey={setMapKey}
                   setCenter={setCenter}
                 ></AllArea>
-                <AddPoint
+                <Filter
                   setPlaceData={setPlaceData}
-                  setAllPlace={setAllPlace}
-                ></AddPoint>
-                <Filter setPlaceData={setPlaceData} allPlace={allPlace}></Filter>
+                  allPlace={allPlace}
+                ></Filter>
               </Stack>
             </div>
           </div>
         </div>
+        <LocationMarker />
       </MapContainer>
     </>
   );

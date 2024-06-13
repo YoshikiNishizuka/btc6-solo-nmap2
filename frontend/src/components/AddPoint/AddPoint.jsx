@@ -3,15 +3,16 @@ import { Modal, Button, TextInput, Checkbox, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 export function AddPoint(props) {
-  const { setPlaceData,setAllPlace } = props;
+  const { setPlaceData, setAllPlace, position } = props;
+  console.log(position)
   const [opened, { open, close }] = useDisclosure(false);
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
       name: "",
       address: "",
-      lat: "",
-      lng: "",
+      lat: position === undefined ? "" : position[0],
+      lng: position === undefined ? "" : position[1],
       wheelchair: false,
       babies: false,
       ostomate: false,
@@ -35,15 +36,15 @@ export function AddPoint(props) {
     await fetch("/api/toilet")
       .then((res) => res.json())
       .then((data) => {
-        setPlaceData(data)
-        setAllPlace(data)
+        setPlaceData(data);
+        setAllPlace(data);
       });
   };
 
   return (
     <>
       <div id="modal">
-        <Modal opened={opened} onClose={close}  title="新規登録画面">
+        <Modal opened={opened} onClose={close} title="新規登録画面">
           <form
             onSubmit={form.onSubmit((value) => {
               clickSubmit(value);
@@ -68,10 +69,8 @@ export function AddPoint(props) {
                 withAsterisk
                 type="number"
                 step="0.00001"
-                min={35.17671}
-                max={35.18838}
                 label="緯度(Latitude)"
-                placeholder="35.176~35.188"
+                placeholder="35.176"
                 key={form.key("lat")}
                 {...form.getInputProps("lat")}
               />
@@ -79,10 +78,8 @@ export function AddPoint(props) {
                 withAsterisk
                 type="number"
                 step="0.00001"
-                min={137.03133}
-                max={137.06706}
                 label="経度(Longitude)"
-                placeholder="137.031~137.067"
+                placeholder="137.031"
                 key={form.key("lng")}
                 {...form.getInputProps("lng")}
               />
