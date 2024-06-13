@@ -9,8 +9,9 @@ import { AllArea } from "../AllArea";
 import { AddPoint } from "../AddPoint";
 import { Stack } from "@mantine/core";
 import { Delete } from "../Delete";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Filter } from "../Filter/Filter";
+import { Try } from "../Try";
 
 // // 現在地アイコン
 const currentIcon = L.icon({
@@ -81,7 +82,7 @@ export const Map = (props) => {
 
   useEffect(() => {
     getNearestList();
-  });
+  },[]);
 
   const deleteMark = async (ele) => {
     await fetch(`/api/toilet/${ele}`, {
