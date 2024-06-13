@@ -6,8 +6,10 @@ import placeMarker from "../../mapIcon/leaf-red.png";
 import shadowMarker from "../../mapIcon/leaf-shadow.png";
 import { Current } from "../Current";
 import { AllArea } from "../AllArea";
-import { Near } from "../Near";
+import { AddPoint } from "../AddPoint";
 import { Stack } from "@mantine/core";
+import { Delete } from "../Delete";
+import { useEffect } from "react";
 
 // // 現在地アイコン
 const currentIcon = L.icon({
@@ -41,7 +43,50 @@ export const Map = (props) => {
     setCenter,
     setMapKey,
     setMapzoom,
+    setPlaceData,
   } = props;
+
+  //経度緯度から２点間の距離を返す
+  const R = Math.PI / 180;
+  function distance(lat1, lng1, lat2, lng2) {
+    lat1 *= R;
+    lng1 *= R;
+    lat2 *= R;
+    lng2 *= R;
+    return (
+      6371 *
+      Math.acos(
+        Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) +
+          Math.sin(lat1) * Math.sin(lat2)
+      )
+    );
+  }
+
+  const getNearestList = async () => {
+    placeData.forEach(
+      (obj) =>
+        (obj.distance =
+          distance(
+            currentPosition.lat,
+            currentPosition.lng,
+            obj.lat,
+            obj.lng
+          ).toFixed(3) + "km")
+    );
+  };
+
+  useEffect(() => {
+    getNearestList();
+  });
+
+  const deleteMark = async (ele) => {
+    console.log(ele);
+    await fetch(`/api/toilet/${ele}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => setPlaceData(data));
+  };
 
   return (
     <>
@@ -50,7 +95,7 @@ export const Map = (props) => {
         key={mapKey}
         center={center}
         zoom={mapzoom}
-        style={{ marginLeft: "5vw", height: "60vh", width: "90vw" }}
+        style={{ marginLeft: "5vw", height: "80vh", width: "90vw" }}
       >
         {/* サークル*/}
         <Circle
@@ -93,6 +138,8 @@ export const Map = (props) => {
                   {item.address}
                   <br />
                   {item.distance}
+                  <br />
+                  <Delete onClick={() => deleteMark(item.id)}></Delete>
                 </Popup>
               </Marker>
             ))
@@ -113,12 +160,9 @@ export const Map = (props) => {
                   setMapKey={setMapKey}
                   setCenter={setCenter}
                 ></AllArea>
-                <Near
-                  placeData={placeData}
-                  setMapzoom={setMapzoom}
-                  setMapKey={setMapKey}
-                  currentPosition={currentPosition}
-                ></Near>
+                <AddPoint
+                setPlaceData={setPlaceData}
+                ></AddPoint>
               </Stack>
             </div>
           </div>

@@ -9,7 +9,6 @@ h2 {
 
 #root {
   margin: 0 auto;
-  /* padding: 2rem; */
   text-align: center;
 }
 
@@ -21,3 +20,6 @@ h2 {
   margin: 0%;
   color:brown
 }
+
+#map{z-index: 1;}
+#modal{z-index: 2;}

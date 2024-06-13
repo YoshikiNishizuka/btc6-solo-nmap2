@@ -30,13 +30,12 @@ class NmapController (@Autowired val toiletRepository: ToiletRepository) {
     }
 
     @DeleteMapping("/api/toilet/{id}")
-    fun deleteTodo(@PathVariable("id") id: Long): ResponseEntity<Unit> {
-        val isTrue = toiletRepository.getToiletID(id).size
-        if (isTrue == 1) {
-            toiletRepository.deleteToilet(id)
-            return ResponseEntity.ok().build<Unit>()
+    fun deleteTodo(@PathVariable("id") id: Long): Any {
+        val res = toiletRepository.getToiletID(id)
+        return if (res.isEmpty()) {
+             ResponseEntity(HttpStatus.NOT_FOUND)
         } else {
-            return ResponseEntity(HttpStatus.NOT_FOUND)
+             ResponseEntity.ok(toiletRepository.deleteToilet(id))
         }
     }
 }

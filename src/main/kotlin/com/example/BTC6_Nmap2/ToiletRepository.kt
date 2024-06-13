@@ -65,7 +65,8 @@ class ToiletRepository(
         return "update"
     }
 
-    fun deleteToilet(id:Long){
+    fun deleteToilet(id:Long): Array<Toilet> {
         jdbcTemplate.update("DELETE FROM toilettes WHERE id=$id")
+        return getToilettes()
     }
 }
