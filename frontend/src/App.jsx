@@ -17,14 +17,18 @@ const App = () => {
     lng: 137.06,
   });
   const [placeData, setPlaceData] = useState([]);
+  const [allPlace,setAllPlace] = useState([])
   const [mapzoom, setMapzoom] = useState("16");
-  const [center, setCenter] = useState({ lat: 35.175, lng: 137.06 });
+  const [center, setCenter] = useState({ lat: 0, lng: 0 });
 
   useEffect(() => {
     moveCurrentPosition();
     fetch("/api/toilet")
       .then((res) => res.json())
-      .then((data) => setPlaceData(data));
+      .then((data) => {
+        setPlaceData(data)
+        setAllPlace(data)
+      });
   }, []);
 
   const moveCurrentPosition = async () => {
@@ -42,10 +46,6 @@ const App = () => {
     setMapKey(new Date().getTime());
   };
 
-  
-
-
-
   return (
     <>
       <h1>N-map2 </h1>
@@ -61,7 +61,9 @@ const App = () => {
         setMapKey={setMapKey}
         setMapzoom={setMapzoom}
         setPlaceData={setPlaceData}
-        ></Map>
+        setAllPlace={setAllPlace}
+        allPlace={allPlace}
+      ></Map>
     </>
   );
 };

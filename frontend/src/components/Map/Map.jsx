@@ -10,6 +10,7 @@ import { AddPoint } from "../AddPoint";
 import { Stack } from "@mantine/core";
 import { Delete } from "../Delete";
 import { useEffect } from "react";
+import { Filter } from "../Filter/Filter";
 
 // // 現在地アイコン
 const currentIcon = L.icon({
@@ -44,6 +45,8 @@ export const Map = (props) => {
     setMapKey,
     setMapzoom,
     setPlaceData,
+    setAllPlace,
+    allPlace,
   } = props;
 
   //経度緯度から２点間の距離を返す
@@ -63,7 +66,7 @@ export const Map = (props) => {
   }
 
   const getNearestList = async () => {
-    placeData.forEach(
+    const addDistance = await placeData.map(
       (obj) =>
         (obj.distance =
           distance(
@@ -73,6 +76,7 @@ export const Map = (props) => {
             obj.lng
           ).toFixed(3) + "km")
     );
+    await setAllPlace(addDistance)
   };
 
   useEffect(() => {
@@ -80,12 +84,14 @@ export const Map = (props) => {
   });
 
   const deleteMark = async (ele) => {
-    console.log(ele);
     await fetch(`/api/toilet/${ele}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
-      .then((data) => setPlaceData(data));
+      .then((data) => {
+        setPlaceData(data);
+        setAllPlace(data);
+      });
   };
 
   return (
@@ -161,8 +167,10 @@ export const Map = (props) => {
                   setCenter={setCenter}
                 ></AllArea>
                 <AddPoint
-                setPlaceData={setPlaceData}
+                  setPlaceData={setPlaceData}
+                  setAllPlace={setAllPlace}
                 ></AddPoint>
+                <Filter setPlaceData={setPlaceData} allPlace={allPlace}></Filter>
               </Stack>
             </div>
           </div>

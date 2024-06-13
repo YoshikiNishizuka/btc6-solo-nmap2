@@ -17,11 +17,11 @@ export function AllArea(props) {
     <Button
       variant="filled"
       color="cyan"
-      size="xs"
+      size="compact-xs"
       radius="xl"
       onClick={() => getAllList()}
     >
-      全
+      全域
     </Button>
   );
 }

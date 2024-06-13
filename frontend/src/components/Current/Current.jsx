@@ -9,7 +9,6 @@ export function Current(props) {
       navigator.geolocation.getCurrentPosition(resolve, reject)
     );
   const moveCurrentPosition = async () => {
-    console.log("動作");
     setMapKey(new Date().getTime());
     const location = await getCurrentPosition();
     setCurrentPosition({
@@ -28,11 +27,11 @@ export function Current(props) {
     <Button
       variant="filled"
       color="cyan"
-      size="xs"
+      size="compact-xs"
       radius="xl"
       onClick={moveCurrentPosition}
     >
-      現
+      現在地
     </Button>
   );
 }

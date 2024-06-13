@@ -3,7 +3,7 @@ import { Modal, Button, TextInput, Checkbox, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 export function AddPoint(props) {
-  const { setPlaceData } = props;
+  const { setPlaceData,setAllPlace } = props;
   const [opened, { open, close }] = useDisclosure(false);
   const form = useForm({
     mode: "uncontrolled",
@@ -25,7 +25,6 @@ export function AddPoint(props) {
   });
 
   const clickSubmit = async (value) => {
-    console.log(value);
     await fetch("/api/toilet", {
       method: "POST",
       headers: {
@@ -35,13 +34,16 @@ export function AddPoint(props) {
     });
     await fetch("/api/toilet")
       .then((res) => res.json())
-      .then((data) => setPlaceData(data));
+      .then((data) => {
+        setPlaceData(data)
+        setAllPlace(data)
+      });
   };
 
   return (
     <>
       <div id="modal">
-        <Modal opened={opened} onClose={close} size="auto" title="新規登録画面">
+        <Modal opened={opened} onClose={close}  title="新規登録画面">
           <form
             onSubmit={form.onSubmit((value) => {
               clickSubmit(value);
@@ -113,13 +115,14 @@ export function AddPoint(props) {
         </Modal>
 
         <Button
+          fullWidth
           variant="filled"
           color="grape"
-          size="xs"
+          size="compact-xs"
           radius="xl"
           onClick={open}
         >
-          加
+          追加
         </Button>
       </div>
     </>

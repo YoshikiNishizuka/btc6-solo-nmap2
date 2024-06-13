@@ -12,14 +12,8 @@ h2 {
   text-align: center;
 }
 
-.read-the-docs{
-  margin: 0%;
-}
-
-.list-button{
-  margin: 0%;
-  color:brown
-}
 
 #map{z-index: 1;}
 #modal{z-index: 2;}
+
+

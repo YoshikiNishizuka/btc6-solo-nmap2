@@ -7,7 +7,7 @@ export function Delete(props) {
     <Button
       variant="filled"
       color="red"
-      size="xs"
+      size="compact-xs"
       radius="xl"
       onClick={onClick}
     >
