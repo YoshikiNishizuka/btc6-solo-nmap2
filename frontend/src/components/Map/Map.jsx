@@ -122,7 +122,7 @@ export const Map = (props) => {
     });
 
     return position === null ? null : (
-      <Marker position={position} icon={addIcon} draggable={true}>
+      <Marker position={position} icon={addIcon}>
         <Popup>
           <AddPoint position={position}></AddPoint>
         </Popup>
