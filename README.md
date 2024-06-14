@@ -7,6 +7,9 @@
 現在地と長久手全体、近い順（クローズアップ）の３つのモード。
 https://github.com/YoshikiNishizuka/btc6-solo-nmap
 
+### deploy url
+https://btc6-solo-nmap2.onrender.com/
+
 --NEW
 
 ## セットアップ

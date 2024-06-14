@@ -4,7 +4,6 @@ import { useForm } from "@mantine/form";
 
 export function AddPoint(props) {
   const { setPlaceData, setAllPlace, position } = props;
-  console.log(position)
   const [opened, { open, close }] = useDisclosure(false);
   const form = useForm({
     mode: "uncontrolled",

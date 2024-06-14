@@ -7,7 +7,7 @@ import {
   Circle,
   useMapEvents,
 } from "react-leaflet";
-import L from "leaflet";
+import L, { marker } from "leaflet";
 import currentMarker from "../../mapIcon/leaf-green.png";
 import placeMarker from "../../mapIcon/leaf-red.png";
 import shadowMarker from "../../mapIcon/leaf-shadow.png";
@@ -119,10 +119,13 @@ export const Map = (props) => {
       click: (location) => {
         setPosition([location.latlng.lat, location.latlng.lng]);
       },
+      dblclick:() =>{
+        setPosition(null)
+      }
     });
 
     return position === null ? null : (
-      <Marker position={position} icon={addIcon}>
+      <Marker position={position} icon={addIcon} draggable={true}>
         <Popup>
           <AddPoint position={position}></AddPoint>
         </Popup>
