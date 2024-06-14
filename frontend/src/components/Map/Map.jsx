@@ -119,15 +119,23 @@ export const Map = (props) => {
       click: (location) => {
         setPosition([location.latlng.lat, location.latlng.lng]);
       },
-      dblclick:() =>{
-        setPosition(null)
-      }
+      contextmenu: () => {
+        setPosition(null);
+      },
+      dblclick: () => {
+        setPosition(null);
+      },
     });
 
     return position === null ? null : (
-      <Marker position={position} icon={addIcon} draggable={true}>
+      <Marker position={position} icon={addIcon}>
         <Popup>
-          <AddPoint setPlaceData={setPlaceData} setAllPlace={setAllPlace} position={position} setMapKey={setMapKey}></AddPoint>
+          <AddPoint
+            setPlaceData={setPlaceData}
+            setAllPlace={setAllPlace}
+            position={position}
+            setMapKey={setMapKey}
+          ></AddPoint>
         </Popup>
       </Marker>
     );

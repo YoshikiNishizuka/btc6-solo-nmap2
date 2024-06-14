@@ -3,7 +3,7 @@ import { Modal, Button, TextInput, Checkbox, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 export function AddPoint(props) {
-  const { setPlaceData, setAllPlace, position } = props;
+  const { setPlaceData, setAllPlace, position ,setMapKey} = props;
   const [opened, { open, close }] = useDisclosure(false);
   const form = useForm({
     mode: "uncontrolled",
@@ -38,6 +38,7 @@ export function AddPoint(props) {
         setPlaceData(data);
         setAllPlace(data);
       });
+      setMapKey(new Date().getTime());
   };
 
   return (
